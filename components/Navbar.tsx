@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { HardHat, Menu, X, User } from 'lucide-react';
 import { Session } from '@supabase/supabase-js';
 
@@ -10,6 +10,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ session }) => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const navLinks = [
     { name: 'Home', href: '/' },
@@ -18,6 +19,56 @@ export const Navbar: React.FC<NavbarProps> = ({ session }) => {
     { name: 'Our Experts', href: '#experts' },
     { name: 'About Us', href: '#about' },
   ];
+
+  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setIsOpen(false);
+
+    // If it's the home link or just "/"
+    if (href === '/') {
+      if (location.pathname !== '/') {
+        navigate('/');
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      return;
+    }
+
+    // Handle hash links
+    if (href.startsWith('#')) {
+      const elementId = href.substring(1);
+      
+      if (location.pathname !== '/') {
+        // If not on home page, navigate to home then scroll
+        navigate('/');
+        // Use a timeout to allow navigation to occur before scrolling
+        setTimeout(() => {
+          const element = document.getElementById(elementId);
+          if (element) {
+            const headerOffset = 80;
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+          }
+        }, 100);
+      } else {
+        // If already on home page, just scroll
+        const element = document.getElementById(elementId);
+        if (element) {
+          const headerOffset = 80;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }
+    }
+  };
 
   return (
     <nav className="bg-white border-b border-slate-100 sticky top-0 z-50">
@@ -37,7 +88,8 @@ export const Navbar: React.FC<NavbarProps> = ({ session }) => {
               <a
                 key={link.name}
                 href={link.href}
-                className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors"
+                onClick={(e) => handleScroll(e, link.href)}
+                className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors cursor-pointer"
               >
                 {link.name}
               </a>
@@ -99,8 +151,8 @@ export const Navbar: React.FC<NavbarProps> = ({ session }) => {
               <a
                 key={link.name}
                 href={link.href}
-                className="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-indigo-600 hover:bg-slate-50"
-                onClick={() => setIsOpen(false)}
+                onClick={(e) => handleScroll(e, link.href)}
+                className="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-indigo-600 hover:bg-slate-50 cursor-pointer"
               >
                 {link.name}
               </a>

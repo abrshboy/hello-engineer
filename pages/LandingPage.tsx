@@ -15,7 +15,10 @@ import {
   Users, 
   Star,
   CheckCircle2,
-  ShieldCheck
+  ShieldCheck,
+  Search,
+  MessageSquare,
+  Trophy
 } from 'lucide-react';
 
 interface LandingPageProps {
@@ -46,6 +49,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({ session }) => {
     { id: 6, name: "James Wilson", role: "Landscape Architect", exp: "10 Years", rating: 4.8, img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200&h=200" },
   ];
 
+  const handleNavClick = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      const headerOffset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
       <Navbar session={session} />
@@ -75,8 +91,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ session }) => {
                   Find Expert <ArrowRight className="ml-2 w-5 h-5" />
                 </button>
                 <button 
-                   onClick={() => navigate('/signup')} // Or scroll to how it works
-                   className="inline-flex items-center justify-center px-8 py-4 text-base font-medium text-slate-700 bg-white border border-slate-200 rounded-full hover:bg-slate-50 hover:border-slate-300 transition-all"
+                   onClick={() => handleNavClick('how-it-works')}
+                   className="inline-flex items-center justify-center px-8 py-4 text-base font-medium text-slate-700 bg-white border border-slate-200 rounded-full hover:bg-slate-50 hover:border-slate-300 transition-all cursor-pointer"
                 >
                   How it Works
                 </button>
@@ -154,8 +170,58 @@ export const LandingPage: React.FC<LandingPageProps> = ({ session }) => {
         </div>
       </section>
 
+      {/* How It Works Section */}
+      <section id="how-it-works" className="py-20 lg:py-28 bg-white scroll-mt-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">How Hello Engineer Works</h2>
+            <p className="text-lg text-slate-600">
+              Simple steps to connect with the best professionals in the industry.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-12 relative">
+            {/* Connecting Line (Desktop) */}
+            <div className="hidden md:block absolute top-12 left-1/6 right-1/6 h-0.5 bg-slate-200 -z-10"></div>
+
+            {/* Step 1 */}
+            <div className="flex flex-col items-center text-center">
+              <div className="w-24 h-24 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 border-8 border-white shadow-sm mb-6">
+                <Search className="w-10 h-10" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">1. Find an Expert</h3>
+              <p className="text-slate-600 leading-relaxed">
+                Browse our curated list of verified engineers and architects based on your project needs.
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="flex flex-col items-center text-center">
+              <div className="w-24 h-24 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 border-8 border-white shadow-sm mb-6">
+                <MessageSquare className="w-10 h-10" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">2. Connect & Plan</h3>
+              <p className="text-slate-600 leading-relaxed">
+                Message professionals directly, discuss your vision, and get quotes for your project.
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="flex flex-col items-center text-center">
+              <div className="w-24 h-24 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 border-8 border-white shadow-sm mb-6">
+                <Trophy className="w-10 h-10" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">3. Build with Confidence</h3>
+              <p className="text-slate-600 leading-relaxed">
+                Hire your expert and start building. Secure payments and verified quality at every step.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Services Section */}
-      <section id="services" className="py-20 lg:py-28 bg-slate-50">
+      <section id="services" className="py-20 lg:py-28 bg-slate-50 scroll-mt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Our Services</h2>
@@ -184,7 +250,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ session }) => {
       </section>
 
       {/* Specialists Section (Infinite Loop) */}
-      <section id="experts" className="py-20 lg:py-28 bg-white overflow-hidden">
+      <section id="experts" className="py-20 lg:py-28 bg-white overflow-hidden scroll-mt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
            <div className="text-center max-w-3xl mx-auto">
             <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Meet Our Top Specialists</h2>
@@ -239,11 +305,54 @@ export const LandingPage: React.FC<LandingPageProps> = ({ session }) => {
         </div>
       </section>
 
+      {/* About Us Section */}
+      <section id="about" className="py-20 lg:py-28 bg-slate-900 text-white scroll-mt-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <h2 className="text-3xl lg:text-4xl font-bold mb-6">Building the Future, Together.</h2>
+              <p className="text-slate-300 text-lg leading-relaxed mb-6">
+                Hello Engineer was founded with a simple mission: to bridge the gap between visionary clients and the engineering talent capable of executing those visions.
+              </p>
+              <p className="text-slate-300 text-lg leading-relaxed mb-8">
+                We screen every professional on our platform to ensure they meet the highest standards of safety, creativity, and reliability. Whether you are building a skyscraper or renovating a kitchen, we have the expert for you.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-8">
+                <div>
+                  <div className="text-3xl font-bold text-indigo-400 mb-1">100%</div>
+                  <div className="text-sm text-slate-400 uppercase tracking-wide">Verified Pros</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-indigo-400 mb-1">24/7</div>
+                  <div className="text-sm text-slate-400 uppercase tracking-wide">Support</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-indigo-400 mb-1">0%</div>
+                  <div className="text-sm text-slate-400 uppercase tracking-wide">Commission Fees</div>
+                </div>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="rounded-2xl overflow-hidden border border-slate-700 shadow-2xl">
+                 <img 
+                  src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2070&auto=format&fit=crop" 
+                  alt="Construction Site Meeting" 
+                  className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity"
+                />
+              </div>
+              <div className="absolute -bottom-8 -left-8 bg-indigo-600 p-8 rounded-tr-3xl hidden lg:block">
+                <HardHat className="w-12 h-12 text-white" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
-      <section className="py-20 bg-indigo-900 text-white">
+      <section className="py-20 bg-indigo-600 text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl lg:text-4xl font-bold mb-6">Ready to start your next project?</h2>
-          <p className="text-indigo-200 text-lg mb-8 max-w-2xl mx-auto">
+          <p className="text-indigo-100 text-lg mb-8 max-w-2xl mx-auto">
             Join thousands of clients and professionals building the future together. 
             Sign up today to find your perfect match.
           </p>
