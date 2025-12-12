@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { supabase } from '../services/supabaseClient';
 import { AuthLayout } from '../components/AuthLayout';
 import { UserRole } from '../types';
-import { Loader2, User, Hammer, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Loader2, User, Hammer, CheckCircle2, AlertCircle, Shield } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export const Signup: React.FC = () => {
@@ -19,9 +19,6 @@ export const Signup: React.FC = () => {
     setLoading(true);
     setError(null);
 
-    // Force admin role for specific email
-    const finalRole = email === 'admiin@hengenner.com' ? UserRole.ADMIN : role;
-
     try {
       const { error } = await supabase.auth.signUp({
         email,
@@ -29,7 +26,7 @@ export const Signup: React.FC = () => {
         options: {
           data: {
             full_name: fullName,
-            role: finalRole,
+            role: role,
           },
         },
       });
@@ -55,6 +52,12 @@ export const Signup: React.FC = () => {
       title: 'Expert',
       description: 'I am a professional looking for work.',
       icon: Hammer,
+    },
+    {
+      id: UserRole.ADMIN,
+      title: 'Admin',
+      description: 'I manage the platform and users.',
+      icon: Shield,
     },
   ];
 

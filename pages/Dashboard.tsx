@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../services/supabaseClient';
-import { UserProfile } from '../types';
-import { LogOut, User, Shield, Briefcase, LayoutDashboard } from 'lucide-react';
+import { UserProfile, UserRole } from '../types';
+import { LogOut, User, Shield, Briefcase, LayoutDashboard, Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export const Dashboard: React.FC = () => {
@@ -42,6 +42,35 @@ export const Dashboard: React.FC = () => {
     navigate('/login');
   };
 
+  const getRoleSpecificContent = () => {
+    switch (profile?.role) {
+      case UserRole.ADMIN:
+        return {
+          title: 'Platform Overview',
+          desc: 'Manage users, verify experts, and monitor platform activity.',
+          icon: Shield,
+          colorClass: 'bg-purple-100 text-purple-600',
+          containerClass: 'bg-purple-50 border-purple-100'
+        };
+      case UserRole.EXPERT:
+        return {
+          title: 'Active Projects',
+          desc: 'You have no active engineering projects at the moment.',
+          icon: Briefcase,
+          colorClass: 'bg-emerald-100 text-emerald-600',
+          containerClass: 'bg-emerald-50 border-emerald-100'
+        };
+      default: // CLIENT
+        return {
+          title: 'My Requests',
+          desc: 'You have not submitted any engineering requests yet.',
+          icon: Briefcase,
+          colorClass: 'bg-blue-100 text-blue-600',
+          containerClass: 'bg-blue-50 border-blue-100'
+        };
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
@@ -49,6 +78,8 @@ export const Dashboard: React.FC = () => {
       </div>
     );
   }
+
+  const roleContent = getRoleSpecificContent();
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -84,7 +115,7 @@ export const Dashboard: React.FC = () => {
             <h2 className="text-2xl font-bold text-slate-900 mb-6">Dashboard</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Card 1 */}
+              {/* Card 1: Profile Info */}
               <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-6">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="p-3 bg-indigo-100 rounded-lg text-indigo-600">
@@ -101,30 +132,28 @@ export const Dashboard: React.FC = () => {
               </div>
 
                {/* Card 2 - Dynamic based on Role */}
-               <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-6">
+               <div className={`${roleContent.containerClass} border rounded-xl p-6`}>
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="p-3 bg-emerald-100 rounded-lg text-emerald-600">
-                    <Briefcase className="h-6 w-6" />
+                  <div className={`p-3 rounded-lg ${roleContent.colorClass}`}>
+                    <roleContent.icon className="h-6 w-6" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-slate-900">
-                      {profile?.role === 'expert' ? 'Active Projects' : 'My Requests'}
+                      {roleContent.title}
                     </h3>
                     <p className="text-sm text-slate-500">0 Active</p>
                   </div>
                 </div>
                 <p className="text-slate-600 text-sm">
-                  {profile?.role === 'expert' 
-                    ? 'You have no active engineering projects at the moment.' 
-                    : 'You have not submitted any engineering requests yet.'}
+                  {roleContent.desc}
                 </p>
               </div>
 
-               {/* Card 3 */}
-               <div className="bg-blue-50 border border-blue-100 rounded-xl p-6">
+               {/* Card 3: Account Type */}
+               <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="p-3 bg-blue-100 rounded-lg text-blue-600">
-                    <Shield className="h-6 w-6" />
+                  <div className="p-3 bg-slate-200 rounded-lg text-slate-600">
+                    <Settings className="h-6 w-6" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-slate-900">Account Type</h3>
