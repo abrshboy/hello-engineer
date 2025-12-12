@@ -69,20 +69,20 @@ export const Signup: React.FC = () => {
       <form className="mt-8 space-y-6" onSubmit={handleSignup}>
         <div className="space-y-4">
           {/* Role Selection */}
-          <div className="grid grid-cols-1 gap-4">
-            <label className="block text-sm font-medium text-slate-700">I am a...</label>
+          <div className="grid grid-cols-1 gap-3">
+            <label className="block text-sm font-medium text-slate-700 mb-1">Select your account type</label>
             {roleOptions.map((option) => (
               <div
                 key={option.id}
                 onClick={() => setRole(option.id)}
-                className={`relative flex items-start p-4 cursor-pointer rounded-lg border-2 transition-all duration-200 ${
+                className={`relative flex items-start p-3 cursor-pointer rounded-lg border-2 transition-all duration-200 ${
                   role === option.id
-                    ? 'border-indigo-600 bg-indigo-50'
+                    ? 'border-indigo-600 bg-indigo-50/50'
                     : 'border-slate-200 hover:border-slate-300 bg-white'
                 }`}
               >
-                <div className="flex-shrink-0">
-                  <option.icon className={`h-6 w-6 ${role === option.id ? 'text-indigo-600' : 'text-slate-400'}`} />
+                <div className="flex-shrink-0 mt-0.5">
+                  <option.icon className={`h-5 w-5 ${role === option.id ? 'text-indigo-600' : 'text-slate-400'}`} />
                 </div>
                 <div className="ml-3 flex-1">
                   <span className={`block text-sm font-medium ${role === option.id ? 'text-indigo-900' : 'text-slate-900'}`}>
@@ -93,7 +93,7 @@ export const Signup: React.FC = () => {
                   </span>
                 </div>
                 {role === option.id && (
-                  <CheckCircle2 className="h-5 w-5 text-indigo-600 absolute top-4 right-4" />
+                  <CheckCircle2 className="h-5 w-5 text-indigo-600 absolute top-3 right-3" />
                 )}
               </div>
             ))}
